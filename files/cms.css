@@ -1,0 +1,2796 @@
+/*  ===============
+
+    Imports
+
+    ===============
+*/
+/*  =================
+
+    Utility functions
+
+    =================
+*/
+/*  ----------------
+
+    Colour utilities
+    
+    ----------------
+*/
+/*  ==============
+
+    Utility mixins
+
+    ==============
+*/
+/*
+ * bg-and-dimensions mixin
+ * v1.11
+ * Created:      2012-03-28 (Martin Funcich)
+ * Last updated: 2012-04-03 (Martin Funcich)
+ *
+ * Example usage (n.b. not from actual site):
+ * #logo { bg-and-dimensions('../img/global/logo.png'); }
+ *
+ * Parameters:
+ * $
+ * $image: string        Relative URL of the image to use
+ * $divide-width: size   How many equal portions are in this image, width-wise
+ * $divide-height: size  How many equal portions are in this image, height-wise
+ *
+ * (The other parameters were designed mainly for use by the image-button mixin
+ *  and haven't been tested outside of it. They might work as you want, or 
+ *  they might not.)
+ *
+ * Dependencies:
+ * if() ternary function
+ */
+/*
+ * Image button mixin
+ * v1.11
+ * Created:      2012-03-28 (Martin Funcich)
+ * Last updated: 2012-04-03 (Martin Funcich)
+ *
+ * Example usages:
+ * a { @include image-button('../img/contact-us/btn-submit.png') };
+ * .nav-prev { @include image-button('../img/global/controls.png', true, true, false, 29px, 29px); }
+ * .nav-next { @include image-button('../img/global/controls.png', true, true, false, 29px, 29px, 29px); }
+ *
+ * Parameters:
+ * $image: string        Relative URL of the image to use
+ * $hover: boolean       Does the image/clip-region contain a hover-state
+ * $active: boolean      Does the image/clip-region contain an active-state
+ * $horizontally-tiled-source-image: boolean
+ *                       Are the left-to-right, or top-to-bottom (default)?
+ * $clip-width: size     Width of button states in image (default, all of it)
+ * $clip-height: size    Height of button states in image (default, all of it)
+ * $clip-left: position  Number of columns of pixels to clip away from the left of the sprite (i.e. negative x-offset)
+ * $clip-top: position   Number of rows of pixels to clip away from the top of the sprite (i.e. negative y-offset)
+ * $clip-region-contains-all-states: boolean
+ *                       So, were those widths and heights for all the button states together, or just one of them? (Default: false = just one of them).
+ * 
+ * Dependencies:
+ * if() ternary function
+ * count-true(list) function
+ * bg-and-dimensions 1.0 (as at 2012-03-28)
+ */
+/*  =================================
+
+    Master variables and style mixins
+
+    =================================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\000031}}
+.button-base, #sm_editions .sm-editions-group #persona_none a {
+  vertical-align: middle;
+  text-transform: none;
+  height: auto;
+  background: transparent;
+  color: #666666;
+  line-height: 16px;
+  padding: 11px 11px;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4wIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0.5)), color-stop(100%, rgba(255, 255, 255, 0)));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  -moz-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.33) inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.33) inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.33) inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000323}}
+.button-base:hover, #sm_editions .sm-editions-group #persona_none a:hover {
+  color: #000;
+  -moz-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.66) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.66) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.66) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000331}}
+.button-base:active, #sm_editions .sm-editions-group #persona_none a:active {
+  padding: 12px 12px;
+  color: #333333;
+  background: rgba(0, 0, 0, 0.1);
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC41Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0.5)));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 -1px 0 rgba(0, 0, 0, 0.08), -1px 0 0 rgba(255, 255, 255, 0.1), 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.33), 0 1px 1px 1px rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 -1px 0 rgba(0, 0, 0, 0.08), -1px 0 0 rgba(255, 255, 255, 0.1), 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.33), 0 1px 1px 1px rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 -1px 0 rgba(0, 0, 0, 0.08), -1px 0 0 rgba(255, 255, 255, 0.1), 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.33), 0 1px 1px 1px rgba(0, 0, 0, 0.2) inset;
+  border: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000351}}
+button.button-base, input[type=button].button-base, input[type=submit].button-base, input[type=reset].button-base {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000356}}
+.sm-menubar_side-left #sm_editions-btn, .sm-menubar_side-left #sm_translation-tool-btn {
+  display: block;
+  background: rgba(41, 87, 148, 0.6);
+  color: #FFF;
+  text-decoration: none;
+  box-shadow: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 41px;
+  height: 41px;
+  line-height: 41px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background .6s ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000370}}
+.sm-menubar_side-left #sm_editions-btn:before, .sm-menubar_side-left #sm_translation-tool-btn:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: 24px;
+  line-height: inherit;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000377}}
+.sm-menubar_side-left #sm_editions-btn:hover, .sm-menubar_side-left #sm_translation-tool-btn:hover, .sm-menubar_side-left #sm_editions-btn:active, .sm-menubar_side-left #sm_translation-tool-btn:active, .sm-menubar_side-left #sm_editions-btn:focus, .sm-menubar_side-left #sm_translation-tool-btn:focus {
+  background: rgba(41, 87, 148, 0.8);
+  color: #FFF;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000384}}
+.sm-menubar_primary #logout-link #logout, .sm-menubar_side-left #logout-link #logout, .sm-menubar_side-right #sm_editing-save-btn, .sm-menubar_side-right #sm_editing-save-as-btn, .sm-menubar_side-right #sm_editing-cancel-btn {
+  display: block;
+  background: #FFF;
+  color: #000;
+  text-decoration: none;
+  box-shadow: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background .3s ease, color .1s ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\0000398}}
+.sm-menubar_primary #logout-link #logout:before, .sm-menubar_side-left #logout-link #logout:before, .sm-menubar_side-right #sm_editing-save-btn:before, .sm-menubar_side-right #sm_editing-save-as-btn:before, .sm-menubar_side-right #sm_editing-cancel-btn:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: 24px;
+  line-height: inherit;
+  text-align: center;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003105}}
+.sm-menubar_primary #logout-link #logout:hover, .sm-menubar_side-left #logout-link #logout:hover, .sm-menubar_side-right #sm_editing-save-btn:hover, .sm-menubar_side-right #sm_editing-save-as-btn:hover, .sm-menubar_side-right #sm_editing-cancel-btn:hover, .sm-menubar_primary #logout-link #logout:active, .sm-menubar_side-left #logout-link #logout:active, .sm-menubar_side-right #sm_editing-save-btn:active, .sm-menubar_side-right #sm_editing-save-as-btn:active, .sm-menubar_side-right #sm_editing-cancel-btn:active, .sm-menubar_primary #logout-link #logout:focus, .sm-menubar_side-left #logout-link #logout:focus, .sm-menubar_side-right #sm_editing-save-btn:focus, .sm-menubar_side-right #sm_editing-save-as-btn:focus, .sm-menubar_side-right #sm_editing-cancel-btn:focus {
+  color: inherit;
+  background: inherit;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003113}}
+.sm-menubar_side-right #sm_editing-selected-btn, .sm-menubar_side-right #sm_editing-selected-cancel-btn {
+  display: block;
+  background: #FFF;
+  color: #000;
+  text-decoration: none;
+  box-shadow: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  line-height: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background .3s ease, color .1s ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003128}}
+.sm-menubar_side-right #sm_editing-selected-btn:before, .sm-menubar_side-right #sm_editing-selected-cancel-btn:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: 16px;
+  line-height: inherit;
+  text-align: center;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003135}}
+.sm-menubar_side-right #sm_editing-selected-btn:hover, .sm-menubar_side-right #sm_editing-selected-cancel-btn:hover, .sm-menubar_side-right #sm_editing-selected-btn:active, .sm-menubar_side-right #sm_editing-selected-cancel-btn:active, .sm-menubar_side-right #sm_editing-selected-btn:focus, .sm-menubar_side-right #sm_editing-selected-cancel-btn:focus {
+  color: inherit;
+  background: inherit;
+}
+
+/*  ===============
+
+    Global vars
+
+    ===============
+*/
+/*  ===============
+
+    Utility classes
+
+    ===============
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\0000336}}
+.sm-dsn {
+  display: none !important;
+}
+
+/*  ==============
+
+    Layout classes
+
+    ==============
+*/
+/*  ------------------------
+
+    Left-centre-right layout
+    
+    ------------------------
+    
+    MF:
+    
+    Markup framework whose semantics are:
+    - Stuff at the start
+    - Stuff at the end
+    - Stuff between them
+    
+    Think HTML5's <header> and <footer> elements for an analogous 
+    and authoritative decision made elsewhere, except that it
+    does not represent the content between those elements with its
+    own container (in my view, a flaw).
+    
+    Maybe we should adopt:
+    <section>
+        <header></header>
+        <article></article>
+        <footer></footer>
+    </section>
+    
+    I dunno.
+    
+    See also:
+    http://visitmix.com/writings/article-vs-section-weve-finally-gone-mad
+    :-)
+*/
+/*  ===========================
+
+    Apply SamuraiCms defaults
+    
+    (to SamuraiCms interface
+    only, not the hosting page)
+
+    ===========================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003105}}
+body.sm-active #hd {
+  margin-top: 40px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003110}}
+body.sm-active #hd-top {
+  top: 40px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003115}}
+body.sm-active #hd-site-nav {
+  top: 92px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003119}}
+body.sm-active #hd-site-search {
+  top: 55px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003125}}
+#sm {
+  position: fixed;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  top: 0;
+  left: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003132}}
+#sm,
+#editingToolbar {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1.25;
+  color: #666666;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003139}}
+#sm a,
+#editingToolbar a {
+  color: #4EB751;
+  text-transform: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_theme\.scss}line{font-family:\00003147}}
+#sm a:hover,
+#editingToolbar a:hover {
+  color: #006800;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003144}}
+#sm ol, #sm ul, #sm dl,
+#editingToolbar ol,
+#editingToolbar ul,
+#editingToolbar dl {
+  margin: 0;
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003148}}
+#sm li,
+#editingToolbar li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003154}}
+#sm button, #sm input[type=button],
+#editingToolbar button,
+#editingToolbar input[type=button] {
+  line-height: 16px;
+  font-size: 12px;
+  padding: 11px 11px;
+  text-transform: none;
+  height: auto;
+  background: none;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, rgba(255, 255, 255, 0)));
+  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0));
+  background-image: -webkit-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0));
+  background-image: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0));
+  color: #333333;
+  vertical-align: middle;
+  -moz-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.33) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.33) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.33) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003173}}
+#sm button:hover, #sm input[type=button]:hover,
+#editingToolbar button:hover,
+#editingToolbar input[type=button]:hover {
+  color: #000;
+  -moz-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.66) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.66) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.66) inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003181}}
+#sm button:active, #sm input[type=button]:active,
+#editingToolbar button:active,
+#editingToolbar input[type=button]:active {
+  color: #000;
+  background: rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 0 0 rgba(255, 255, 255, 0.66), 0 1px rgba(0, 0, 0, 0.3) inset;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 0 0 rgba(255, 255, 255, 0.66), 0 1px rgba(0, 0, 0, 0.3) inset;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 0 0 rgba(255, 255, 255, 0.66), 0 1px rgba(0, 0, 0, 0.3) inset;
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 -1px 0 rgba(0, 0, 0, 0.1), -1px 0 0 rgba(255, 255, 255, 0.1), 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.33), 0 1px 1px 1px rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 -1px 0 rgba(0, 0, 0, 0.1), -1px 0 0 rgba(255, 255, 255, 0.1), 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.33), 0 1px 1px 1px rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 -1px 0 rgba(0, 0, 0, 0.1), -1px 0 0 rgba(255, 255, 255, 0.1), 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.33), 0 1px 1px 1px rgba(0, 0, 0, 0.2) inset;
+  border: none;
+  padding: 12px 12px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003202}}
+#sm #ckeditor_toolbar,
+#editingToolbar #ckeditor_toolbar {
+  width: 960px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003210}}
+.sm-tabs {
+  margin-bottom: -1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003213}}
+.sm-tabs .sm-tab a {
+  background: transparent;
+  color: #8c8c8c;
+  padding: 12px 12px;
+  line-height: 16px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  margin: -1px;
+  margin-right: 0;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003226}}
+.sm-tabs .sm-tab a:hover, .sm-tabs .sm-tab.selected a {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-color: rgba(154, 154, 154, 0.5);
+  position: relative;
+  -moz-border-radius-topleft: 5px;
+  -webkit-border-top-left-radius: 5px;
+  border-top-left-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 12px 12px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003236}}
+.sm-tabs .sm-tab.selected a {
+  position: relative;
+  z-index: 1;
+  border-color: #9a9a9a;
+  background: #FFFFFF;
+  color: #000;
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 1px 0 0 rgba(255, 255, 255, 0.5) inset, -1px 0 0 rgba(255, 255, 255, 0.5) inset;
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 1px 0 0 rgba(255, 255, 255, 0.5) inset, -1px 0 0 rgba(255, 255, 255, 0.5) inset;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 1px 0 0 rgba(255, 255, 255, 0.5) inset, -1px 0 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003252}}
+.sm-radiopush-group {
+  *zoom: 1;
+  *zoom: 1;
+  /* IE < 8 */
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: middle;
+  margin-left: 12px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003248}}
+.sm-radiopush-group:before, .sm-radiopush-group:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003255}}
+.sm-radiopush-group:after {
+  clear: both;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003257}}
+.sm-radiopush-group:first-child {
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003261}}
+.sm-radiopush-group .sm-radiopush {
+  float: left;
+  display: block;
+  margin: 6px 0;
+  margin-left: -1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003266}}
+.sm-radiopush-group .sm-radiopush:first-child {
+  margin-left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003268}}
+.sm-radiopush-group .sm-radiopush a {
+  display: block;
+  text-decoration: none;
+  padding: 5px 5px;
+  border: 1px solid transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003274}}
+.sm-radiopush-group .sm-radiopush a:hover {
+  border-color: #d9d9d9;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003278}}
+.sm-radiopush-group .sm-radiopush.selected a {
+  position: relative;
+  z-index: 1;
+  border-color: #b3b3b3;
+  -moz-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1), -1px 0px 0 0 rgba(255, 255, 255, 0.33), 1px 0px 0 0 rgba(255, 255, 255, 0.33), 0 1px 0 0 white;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1), -1px 0px 0 0 rgba(255, 255, 255, 0.33), 1px 0px 0 0 rgba(255, 255, 255, 0.33), 0 1px 0 0 white;
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.1), -1px 0px 0 0 rgba(255, 255, 255, 0.33), 1px 0px 0 0 rgba(255, 255, 255, 0.33), 0 1px 0 0 white;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0), #ffffff);
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), #ffffff);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
+}
+
+/*  ===============
+
+    On-page editing
+
+    ===============
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003314}}
+#image_preview_container {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003319}}
+img#image_preview {
+  max-width: 350px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003323}}
+.sm-handle-container {
+  margin-top: -46px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003326}}
+.sm-handle-container.sm-handle-container_editable {
+  margin-left: -27px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003326}}
+.sm-handle-container.sm-handle-container_editable.sm-handle-container_on-right {
+  margin-left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003326}}
+.sm-handle-container.sm-handle-container_editable.sm-handle-container_on-bottom {
+  margin-top: -16px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003327}}
+.sm-handle-container.sm-handle-container_linkable {
+  margin-left: -34px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003327}}
+.sm-handle-container.sm-handle-container_linkable.sm-handle-container_on-right {
+  margin-left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003327}}
+.sm-handle-container.sm-handle-container_linkable.sm-handle-container_on-bottom {
+  margin-top: -23px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003331}}
+.sm-handle-container.sm-handle-container_linkable_container {
+  margin-top: -1px;
+  margin-left: -29px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003331}}
+.sm-handle-container.sm-handle-container_linkable_container.sm-handle-container_on-right {
+  margin-left: 20px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003331}}
+.sm-handle-container.sm-handle-container_linkable_container.sm-handle-container_on-bottom {
+  margin-top: -16px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003332}}
+.sm-handle-container.sm-handle-container-page {
+  margin-left: 0;
+  margin-top: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003335}}
+.sm-handle {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003337}}
+.sm-handle.sm-handle_editable {
+  border: 0;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  overflow: hidden;
+  line-height: 9999;
+  color: transparent;
+  background: url("images/handles/editable.png") left top no-repeat;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003402}}
+.sm-handle.sm-handle_editable:hover {
+  background-position: 0 -22px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003338}}
+.sm-handle.sm-handle_linkable {
+  border: 0;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  overflow: hidden;
+  line-height: 9999;
+  color: transparent;
+  background: url("images/handles/linkable.png") left top no-repeat;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003402}}
+.sm-handle.sm-handle_linkable:hover {
+  background-position: 0 -29px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003340}}
+.sm-handle,
+.sm-action {
+  margin-bottom: -1px;
+  padding-right: 5px !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003343}}
+.sm-handle x:-moz-any-link, .sm-handle,
+.sm-action x:-moz-any-link,
+.sm-action {
+  margin-left: 8px;
+  /* prevent gap between handle and cmsitem in FF */
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003346}}
+.sm-handle-container_on-right .sm-handle, .sm-handle-container_on-right
+.sm-action {
+  padding-right: 0 !important;
+  padding-left: 5px !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003349}}
+.sm-handle-container_on-right .sm-handle.sm-handle_editable, .sm-handle-container_on-right
+.sm-action.sm-handle_editable {
+  background: url("images/handles/editable.png") right top no-repeat;
+  width: 22px;
+  height: 22px;
+  overflow: hidden;
+  line-height: 9999em;
+  font-size: 0;
+  color: transparent;
+  padding: 0;
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003305}}
+.sm-handle-container_on-right .sm-handle.sm-handle_editable:hover, .sm-handle-container_on-right
+.sm-action.sm-handle_editable:hover {
+  background-position: right -22px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003350}}
+.sm-handle-container_on-right .sm-handle.sm-handle_linkable, .sm-handle-container_on-right
+.sm-action.sm-handle_linkable {
+  background: url("images/handles/linkable.png") right top no-repeat;
+  width: 29px;
+  height: 29px;
+  overflow: hidden;
+  line-height: 9999em;
+  font-size: 0;
+  color: transparent;
+  padding: 0;
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003305}}
+.sm-handle-container_on-right .sm-handle.sm-handle_linkable:hover, .sm-handle-container_on-right
+.sm-action.sm-handle_linkable:hover {
+  background-position: right -29px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003353}}
+.sm-handle-container_linkable_container .sm-handle, .sm-handle-container_linkable_container
+.sm-action {
+  padding-right: 20px !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003356}}
+.sm-handle-container_linkable_container.sm-handle-container_on-right .sm-handle, .sm-handle-container_linkable_container.sm-handle-container_on-right
+.sm-action {
+  padding-right: 0 !important;
+  padding-left: 20px !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003361}}
+.sm-action {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003363}}
+.sm-action.sm-action_add-child {
+  border: 0;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  overflow: hidden;
+  line-height: 9999;
+  color: transparent;
+  background: url("images/actions/add-child.png") left top no-repeat;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003402}}
+.sm-action.sm-action_add-child:hover {
+  background-position: 0 -29px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003366}}
+.sm-handle-container_on-right .sm-action.sm-action_add-child {
+  background: url("images/actions/add-child.png") right top no-repeat;
+  width: 29px;
+  height: 29px;
+  overflow: hidden;
+  line-height: 9999em;
+  font-size: 0;
+  color: transparent;
+  padding: 0;
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003305}}
+.sm-handle-container_on-right .sm-action.sm-action_add-child:hover {
+  background-position: right -29px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003394}}
+.sm-cmsitem-container {
+  margin: -20px;
+  padding: 20px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003397}}
+.sm-cmsitem-container.sm-cmsitem-current-frame {
+  margin: 0;
+  padding: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003403}}
+.sm-cmsitem-current,
+.sm-cmsitem-current-frame,
+.sm-cmsitem-parent-of-current,
+.sm-cmsitem-parent-of-current-frame {
+  position: relative;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003409}}
+.sm-cmsitem-current,
+.sm-cmsitem-parent-of-current {
+  border-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003412}}
+.sm-cmsitem-current > *,
+.sm-cmsitem-parent-of-current > * {
+  border-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003413}}
+.sm-cmsitem-current + tr,
+.sm-cmsitem-parent-of-current + tr {
+  border-top-color: transparent !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003415}}
+.sm-cmsitem-current + tr td,
+.sm-cmsitem-parent-of-current + tr td {
+  border-top-color: transparent !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003418}}
+.sm-cmsitem-current-frame {
+  -moz-box-shadow: 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.25), 0 2px 4px 6px rgba(0, 0, 0, 0.33);
+  -webkit-box-shadow: 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.25), 0 2px 4px 6px rgba(0, 0, 0, 0.33);
+  box-shadow: 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.25), 0 2px 4px 6px rgba(0, 0, 0, 0.33);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003420}}
+.sm-cmsitem-current-frame.sm-cmsitem-container-frame {
+  -moz-box-shadow: 0 0 0 0 #FFFFFF, 0 0 0 1px rgba(0, 0, 0, 0.25), 0 2px 4px 1px rgba(0, 0, 0, 0.33);
+  -webkit-box-shadow: 0 0 0 0 #FFFFFF, 0 0 0 1px rgba(0, 0, 0, 0.25), 0 2px 4px 1px rgba(0, 0, 0, 0.33);
+  box-shadow: 0 0 0 0 #FFFFFF, 0 0 0 1px rgba(0, 0, 0, 0.25), 0 2px 4px 1px rgba(0, 0, 0, 0.33);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003424}}
+.sm-cmsitem-parent-of-current-frame {
+  -moz-box-shadow: 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.15);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003426}}
+.sm-cmsitem-parent-of-current-frame.sm-cmsitem-container-frame {
+  -moz-box-shadow: 0 0 0 0 #FFFFFF, 0 0 0 1px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 0 0 0 #FFFFFF, 0 0 0 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 0 0 #FFFFFF, 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003430}}
+.sm-cmsitem-highlight-frame {
+  background: rgba(136, 255, 136, 0.25) !important;
+  -moz-box-shadow: 0 0 0 5px #E1FFE1, 0 0 0 6px rgba(0, 0, 0, 0.4), 0 5px 10px 6px rgba(0, 0, 0, 0.33);
+  -webkit-box-shadow: 0 0 0 5px #E1FFE1, 0 0 0 6px rgba(0, 0, 0, 0.4), 0 5px 10px 6px rgba(0, 0, 0, 0.33);
+  box-shadow: 0 0 0 5px #E1FFE1, 0 0 0 6px rgba(0, 0, 0, 0.4), 0 5px 10px 6px rgba(0, 0, 0, 0.33);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003432}}
+.sm-cmsitem-highlight-frame.sm-cmsitem-container-frame {
+  background: rgba(136, 255, 136, 0.25) !important;
+  -moz-box-shadow: 0 0 0 0 #E1FFE1, 0 0 0 1px rgba(0, 0, 0, 0.4), 0 5px 10px 1px rgba(0, 0, 0, 0.33);
+  -webkit-box-shadow: 0 0 0 0 #E1FFE1, 0 0 0 1px rgba(0, 0, 0, 0.4), 0 5px 10px 1px rgba(0, 0, 0, 0.33);
+  box-shadow: 0 0 0 0 #E1FFE1, 0 0 0 1px rgba(0, 0, 0, 0.4), 0 5px 10px 1px rgba(0, 0, 0, 0.33);
+}
+
+/*  =========
+
+    Menu bars
+
+    =========
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003445}}
+#sm_menubars_container {
+  width: 100%;
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003452}}
+#sm_menubars {
+  width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003457}}
+#sm_menubars.editingmode .sm-dropdown > .sm-content,
+#sm_menubars.editingmode .sm-layout-lcr-centre {
+  visibility: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003463}}
+#sm_menubars .sm-content {
+  z-index: 2;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003467}}
+#sm_menubars .sm-content-close-btn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #444;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003475}}
+#sm_menubars .sm-content-close-btn:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "\f00d";
+  font-size: 20px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003482}}
+#sm_menubars .sm-editing-table td {
+  padding-bottom: 4px;
+  padding-top: 4px;
+}
+
+/*  ----------------------
+
+    Main top bar
+    
+    ----------------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003495}}
+.sm-menubar_primary, .sm-menubar_side-left {
+  background-color: #2F2F2F;
+  color: #aeaeae;
+  text-align: left;
+  border-bottom: 2px solid #afafaf;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003502}}
+.sm-menubar_primary .sm-layout-lcr, .sm-menubar_primary .sm_editions, .sm-menubar_side-left .sm-layout-lcr, .sm-menubar_side-left .sm_editions {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  *zoom: 1;
+  *zoom: 1;
+  /* IE < 8 */
+  display: block;
+  width: 100%;
+  position: relative;
+  z-index: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003248}}
+.sm-menubar_primary .sm-layout-lcr:before, .sm-menubar_primary .sm-layout-lcr:after, .sm-menubar_primary .sm_editions:before, .sm-menubar_primary .sm_editions:after, .sm-menubar_side-left .sm-layout-lcr:before, .sm-menubar_side-left .sm-layout-lcr:after, .sm-menubar_side-left .sm_editions:before, .sm-menubar_side-left .sm_editions:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003255}}
+.sm-menubar_primary .sm-layout-lcr:after, .sm-menubar_primary .sm_editions:after, .sm-menubar_side-left .sm-layout-lcr:after, .sm-menubar_side-left .sm_editions:after {
+  clear: both;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003510}}
+.sm-menubar_primary .sm-layout-lcr .sm-layout-lcr-left, .sm-menubar_primary .sm_editions .sm-layout-lcr-left, .sm-menubar_side-left .sm-layout-lcr .sm-layout-lcr-left, .sm-menubar_side-left .sm_editions .sm-layout-lcr-left {
+  height: 40px;
+  line-height: 40px;
+  text-align: left;
+  float: left;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003515}}
+.sm-menubar_primary .sm-layout-lcr .sm-layout-lcr-centre, .sm-menubar_primary .sm_editions .sm-layout-lcr-centre, .sm-menubar_side-left .sm-layout-lcr .sm-layout-lcr-centre, .sm-menubar_side-left .sm_editions .sm-layout-lcr-centre {
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: -1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003525}}
+.sm-menubar_primary .sm-layout-lcr .sm-layout-lcr-right, .sm-menubar_primary .sm_editions .sm-layout-lcr-right, .sm-menubar_side-left .sm-layout-lcr .sm-layout-lcr-right, .sm-menubar_side-left .sm_editions .sm-layout-lcr-right {
+  float: right;
+  text-align: right;
+  height: 40px;
+  line-height: 40px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003532}}
+.sm-menubar_primary #sm_editions-description, .sm-menubar_side-left #sm_editions-description {
+  margin: 0;
+  text-transform: uppercase;
+  display: inline-block;
+  color: #EEE;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003539}}
+.sm-menubar_primary #logout-link, .sm-menubar_side-left #logout-link {
+  display: table-cell;
+  vertical-align: middle;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003542}}
+.sm-menubar_primary #logout-link #logout, .sm-menubar_side-left #logout-link #logout {
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+  position: relative;
+  border-bottom: 1px solid #afafaf;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003546}}
+.sm-menubar_primary #logout-link #logout:before, .sm-menubar_side-left #logout-link #logout:before {
+  content: "\f08b";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003549}}
+.sm-menubar_primary #logout-link #logout:hover, .sm-menubar_primary #logout-link #logout:focus, .sm-menubar_primary #logout-link #logout:active, .sm-menubar_side-left #logout-link #logout:hover, .sm-menubar_side-left #logout-link #logout:focus, .sm-menubar_side-left #logout-link #logout:active {
+  color: #000;
+  background: #EEE;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003551}}
+.sm-menubar_primary #logout-link #logout span, .sm-menubar_side-left #logout-link #logout span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003556}}
+.sm-menubar_primary .sm-dropdown, .sm-menubar_side-left .sm-dropdown {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 12px 0;
+  line-height: 16px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003563}}
+.sm-menubar_primary .sm-dropdown, .sm-menubar_side-left .sm-dropdown {
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003583}}
+.sm-menubar_primary .sm-dropdown .sm-dropdown, .sm-menubar_side-left .sm-dropdown .sm-dropdown {
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003586}}
+.sm-menubar_primary .sm-dropdown .sm-dropdown > .sm-content, .sm-menubar_side-left .sm-dropdown .sm-dropdown > .sm-content {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  min-width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003592}}
+.sm-menubar_primary .sm-dropdown > .sm-label, .sm-menubar_side-left .sm-dropdown > .sm-label {
+  padding: 12px 12px;
+  height: 16px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003596}}
+.sm-menubar_primary .sm-dropdown > .sm-content, .sm-menubar_side-left .sm-dropdown > .sm-content {
+  background: #FFFFFF;
+  color: #666666;
+  margin-top: -1px;
+  border-top: 3px solid #cccccc;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003602}}
+.sm-menubar_primary .sm-dropdown > .sm-content .lbl, .sm-menubar_side-left .sm-dropdown > .sm-content .lbl {
+  width: 85px;
+  display: inline-block;
+  color: #666666;
+  text-align: right;
+  padding-right: 18px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003612}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-label, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-label {
+  background: transparent;
+  color: #666666;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003615}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-label:after, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-label:after {
+  color: #000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003620}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown.open > .sm-label, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown.open > .sm-label {
+  background: #696969;
+  color: #dadada;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003623}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown.open > .sm-label:after, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown.open > .sm-label:after {
+  color: #FFFFFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003628}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content {
+  background: #FFFFFF;
+  color: #666666;
+  position: absolute;
+  padding: 9px 9px;
+  border: 3px solid dimgray;
+  display: none;
+  margin-top: 1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003643}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items {
+  margin: 20px 0 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003645}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items:first-child, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items:first-child {
+  margin-top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003649}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-items-label, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-items-label {
+  padding: 0 9px;
+  margin: 0 -9px;
+  color: #000;
+  text-transform: uppercase;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003656}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-item, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-item {
+  display: block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003658}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-item > a, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-item > a {
+  display: block;
+  text-decoration: none;
+  padding: 4px 9px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003662}}
+.sm-menubar_primary .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-item > a:hover, .sm-menubar_side-left .sm-dropdown > .sm-content .sm-dropdown > .sm-content .sm-items .sm-item > a:hover {
+  background: #D8D8D8;
+  color: #000;
+  cursor: pointer;
+}
+
+/*  ----------------------
+
+    Sidebar left
+    
+    ----------------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003685}}
+.sm-menubar_side-left {
+  position: absolute;
+  top: 40px;
+  right: auto;
+  width: 62px;
+  left: -62px;
+  transition: left .4s ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003693}}
+.sm-menubar_side-left.active {
+  left: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003697}}
+.sm-menubar_side-left #sm_editions-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003705}}
+.sm-menubar_side-left #sm_editions-btn:before {
+  content: "\f0c0";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003711}}
+.sm-menubar_side-left #sm_translation-tool-btn {
+  position: absolute;
+  top: 52px;
+  left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003719}}
+.sm-menubar_side-left #sm_translation-tool-btn:before {
+  content: "\f069";
+}
+
+/*  ----------------------
+
+    Sidebar right
+    
+    ----------------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003735}}
+.sm-menubar_side-right {
+  position: fixed;
+  height: 100%;
+  width: 64px;
+  top: 40px;
+  left: auto;
+  background: #AAA;
+  right: -64px;
+  transition: right .4s ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003745}}
+.sm-menubar_side-right.active {
+  right: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003749}}
+.sm-menubar_side-right #sm_editing-save-btn {
+  color: #00C000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003752}}
+.sm-menubar_side-right #sm_editing-save-btn:before {
+  content: "\f0c7";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003755}}
+.sm-menubar_side-right #sm_editing-save-btn:hover, .sm-menubar_side-right #sm_editing-save-btn:focus, .sm-menubar_side-right #sm_editing-save-btn:active {
+  color: #00C000;
+  background: #EEE;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003758}}
+.sm-menubar_side-right #sm_editing-save-as-btn {
+  background: #00C000;
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003763}}
+.sm-menubar_side-right #sm_editing-save-as-btn:before {
+  content: "\f0c7";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003766}}
+.sm-menubar_side-right #sm_editing-save-as-btn:hover, .sm-menubar_side-right #sm_editing-save-as-btn:focus, .sm-menubar_side-right #sm_editing-save-as-btn:active {
+  color: #FFF;
+  background: #00f300;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003769}}
+.sm-menubar_side-right #sm_editing-cancel-btn {
+  background: #C00000;
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003774}}
+.sm-menubar_side-right #sm_editing-cancel-btn:before {
+  content: "\f057";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003777}}
+.sm-menubar_side-right #sm_editing-cancel-btn:hover, .sm-menubar_side-right #sm_editing-cancel-btn:focus, .sm-menubar_side-right #sm_editing-cancel-btn:active {
+  color: #FFF;
+  background: #f30000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003782}}
+.sm-menubar_side-right #sm_editing-save-as-panel {
+  background-color: #000;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  padding: 20px;
+  overflow: scroll;
+  width: 450px;
+  left: auto;
+  right: -450px;
+  opacity: 0;
+  transition: .5s right ease,.5s visibility ease,.5s opacity ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003784}}
+.sm-menubar_side-right #sm_editing-save-as-panel, .sm-menubar_side-right #sm_editing-save-as-panel * {
+  color: #FFF !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003796}}
+.sm-menubar_side-right #sm_editing-save-as-panel.active {
+  right: 0;
+  opacity: 1;
+  visibility: visible;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003803}}
+.sm-menubar_side-right #sm_editing-save-as-panel--close-panel-btn {
+  position: relative;
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003808}}
+.sm-menubar_side-right #sm_editing-selected-btn {
+  background: #00C000;
+  color: #FFF;
+  font-size: 15px;
+  font-weight: normal;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003814}}
+.sm-menubar_side-right #sm_editing-selected-btn:before {
+  content: "\f0c7";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003817}}
+.sm-menubar_side-right #sm_editing-selected-btn:hover, .sm-menubar_side-right #sm_editing-selected-btn:focus, .sm-menubar_side-right #sm_editing-selected-btn:active {
+  color: #FFF;
+  background: #00f300;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003820}}
+.sm-menubar_side-right #sm_editing-selected-cancel-btn {
+  background: #C00000;
+  color: #FFF;
+  font-size: 15px;
+  font-weight: normal;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003826}}
+.sm-menubar_side-right #sm_editing-selected-cancel-btn:before {
+  content: "\f014";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003829}}
+.sm-menubar_side-right #sm_editing-selected-cancel-btn:hover, .sm-menubar_side-right #sm_editing-selected-cancel-btn:focus, .sm-menubar_side-right #sm_editing-selected-cancel-btn:active {
+  color: #FFF;
+  background: #f30000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003832}}
+.sm-menubar_side-right .sm-editing-table {
+  margin-bottom: 25px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003835}}
+.sm-menubar_side-right .sm-editing-table thead {
+  border-bottom: 4px solid #FFF;
+  text-transform: uppercase;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003840}}
+.sm-menubar_side-right .sm-editing-table tbody {
+  border: medium none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003845}}
+.sm-menubar_side-right .sm-editing-table tr:hover {
+  background: transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003849}}
+.sm-menubar_side-right .sm-editing-table tr.published {
+  background-color: #204d74;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003853}}
+.sm-menubar_side-right .sm-editing-table tr.unpublished {
+  background-color: #286090;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003857}}
+.sm-menubar_side-right .sm-editing-table tr.translation-content {
+  border-bottom: 1px solid #B8B8B8;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003862}}
+.sm-menubar_side-right .sm-editing-table tr td.sm-editing-table-history-locale {
+  font-size: 16px;
+  font-family: monospace;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003868}}
+.sm-menubar_side-right .sm-editing-table tr td a.save, .sm-menubar_side-right .sm-editing-table tr td a.delete {
+  font-size: 18px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003875}}
+.sm-menubar_side-right .sm-editing-table img.history-preview-image {
+  max-height: 60px;
+  max-width: 100px;
+}
+
+/*  =======
+
+    Overlay
+    
+    =======
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003889}}
+#sm_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #000;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75);
+  opacity: 0.75;
+}
+
+/*  =============
+
+    All dropdowns
+    
+    =============
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003901}}
+.sm-dropdown,
+.edit-tab {
+  *zoom: 1;
+  *zoom: 1;
+  /* IE < 8 */
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003248}}
+.sm-dropdown:before, .sm-dropdown:after,
+.edit-tab:before,
+.edit-tab:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003255}}
+.sm-dropdown:after,
+.edit-tab:after {
+  clear: both;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003904}}
+.sm-dropdown > .sm-label, .sm-dropdown > .edit-label,
+.edit-tab > .sm-label,
+.edit-tab > .edit-label {
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003908}}
+.sm-dropdown > .sm-label:after, .sm-dropdown > .edit-label:after,
+.edit-tab > .sm-label:after,
+.edit-tab > .edit-label:after {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: middle;
+  content: "\25BC";
+  -moz-transform: scaleY(0.6);
+  -ms-transform: scaleY(0.6);
+  -webkit-transform: scaleY(0.6);
+  transform: scaleY(0.6);
+  -webkit-transform: scaleY(0.6) translateY(-0.2em);
+  font-size: 16px;
+  margin-top: -0.1em;
+  margin-bottom: -0.1em;
+  line-height: 16px;
+  padding-left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003921}}
+.sm-dropdown > .sm-label.open:after, .sm-dropdown > .edit-label.open:after,
+.edit-tab > .sm-label.open:after,
+.edit-tab > .edit-label.open:after {
+  content: "\25b2";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003925}}
+.sm-dropdown > .sm-content, .sm-dropdown > .edit-content,
+.edit-tab > .sm-content,
+.edit-tab > .edit-content {
+  position: absolute;
+  padding: 8px;
+  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.66);
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.66);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.66);
+}
+
+/*  ---------------------
+
+    Dropdowns in menubars
+    
+    ---------------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003943}}
+.sm-menubar .sm-dropdown > .edit-label, .sm-menubar .sm-dropdown > .sm-label,
+#editingToolbar .edit-tab > .edit-label,
+#editingToolbar .edit-tab > .sm-label {
+  cursor: pointer;
+  padding: 12px 12px;
+  display: block;
+  padding: 0 12px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003950}}
+.sm-menubar .sm-dropdown > .edit-label:after, .sm-menubar .sm-dropdown > .sm-label:after,
+#editingToolbar .edit-tab > .edit-label:after,
+#editingToolbar .edit-tab > .sm-label:after {
+  color: #fff;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003954}}
+.sm-menubar .sm-dropdown > .edit-label:hover, .sm-menubar .sm-dropdown > .sm-label:hover,
+#editingToolbar .edit-tab > .edit-label:hover,
+#editingToolbar .edit-tab > .sm-label:hover {
+  background: rgba(105, 105, 105, 0.25);
+  color: #b9b9b9;
+  -moz-box-shadow: 0 0 0 1px rgba(105, 105, 105, 0.25) inset;
+  -webkit-box-shadow: 0 0 0 1px rgba(105, 105, 105, 0.25) inset;
+  box-shadow: 0 0 0 1px rgba(105, 105, 105, 0.25) inset;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003963}}
+.sm-menubar .sm-dropdown.open > .edit-label, .sm-menubar .sm-dropdown.open > .sm-label,
+#editingToolbar .edit-tab.open > .edit-label,
+#editingToolbar .edit-tab.open > .sm-label {
+  background: #696969;
+  color: #dadada;
+  padding-bottom: 13px;
+  margin-bottom: -1px;
+  z-index: 1;
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003976}}
+.sm-menubar .sm-dropdown > .edit-content,
+#editingToolbar .edit-tab > .edit-content {
+  background: #2F2F2F;
+  color: #cbcbcb;
+  position: absolute;
+  padding: 4px 8px;
+  border: 3px solid dimgray;
+  -moz-box-shadow: -1px -1px 0 #afafaf, 1px -1px 0 #afafaf, 0 0 0 1px #2F2F2F;
+  -webkit-box-shadow: -1px -1px 0 #afafaf, 1px -1px 0 #afafaf, 0 0 0 1px #2F2F2F;
+  box-shadow: -1px -1px 0 #afafaf, 1px -1px 0 #afafaf, 0 0 0 1px #2F2F2F;
+  width: 420px;
+  display: none;
+  margin-top: 1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\00003998}}
+.sm-menubar .sm-dropdown > .edit-content .edit-acc,
+#editingToolbar .edit-tab > .edit-content .edit-acc {
+  margin: 12px 0 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031000}}
+.sm-menubar .sm-dropdown > .edit-content .edit-acc:first-child,
+#editingToolbar .edit-tab > .edit-content .edit-acc:first-child {
+  margin-top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031005}}
+.sm-menubar .sm-dropdown > .edit-content .edit-acc-label,
+#editingToolbar .edit-tab > .edit-content .edit-acc-label {
+  padding: 4px 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031011}}
+.sm-menubar .sm-dropdown > .edit-content .edit-acc-content img,
+#editingToolbar .edit-tab > .edit-content .edit-acc-content img {
+  background-color: white;
+  width: 100px;
+  height: 50px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031018}}
+.sm-menubar .sm-dropdown > .edit-content li,
+#editingToolbar .edit-tab > .edit-content li {
+  padding: 2px 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031024}}
+.sm-menubar .sm-dropdown > .edit-content li:hover,
+#editingToolbar .edit-tab > .edit-content li:hover {
+  background: #696969;
+  cursor: pointer;
+  padding-right: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031030}}
+.sm-menubar .sm-dropdown > .edit-content a,
+#editingToolbar .edit-tab > .edit-content a {
+  color: #fff;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_theme\.scss}line{font-family:\00003155}}
+.sm-menubar .sm-dropdown > .edit-content a:hover,
+#editingToolbar .edit-tab > .edit-content a:hover {
+  color: #fff;
+}
+
+/*  ----------------------
+
+    Scrolling menubar items
+    
+    ----------------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031045}}
+div.scroll {
+  line-height: 6px;
+  height: 18px;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  vertical-align: middle;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031054}}
+div.scroll.disabled {
+  color: #555;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031058}}
+div.scroll#up:after, div.scroll#down:after {
+  font-size: 12px;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: top;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031065}}
+div.scroll#up:after {
+  content: "\25b2";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031069}}
+div.scroll#down:after {
+  content: "\25BC";
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031073}}
+div.scroll#down:hover, div.scroll#up:hover {
+  background: #696969;
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031080}}
+#editingToolbar .edit-tab {
+  position: relative;
+}
+
+/*  -----------------
+
+    Editions dropdown
+    
+    -----------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031097}}
+#sm_editions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031104}}
+#sm_editions:hover > .sm-label {
+  -moz-box-shadow: 0 0 0 1px rgba(78, 183, 81, 0.25) inset;
+  -webkit-box-shadow: 0 0 0 1px rgba(78, 183, 81, 0.25) inset;
+  box-shadow: 0 0 0 1px rgba(78, 183, 81, 0.25) inset;
+  background-color: rgba(78, 183, 81, 0.2);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031108}}
+#sm_editions > .sm-label.open {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRlYjc1MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJmNmUzMSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #4eb751), color-stop(100%, #2f6e31));
+  background-image: -moz-linear-gradient(bottom, #4eb751, #2f6e31);
+  background-image: -webkit-linear-gradient(bottom, #4eb751, #2f6e31);
+  background-image: linear-gradient(to top, #4eb751, #2f6e31);
+  -moz-box-shadow: 0 0 0 1px #4EB751 inset;
+  -webkit-box-shadow: 0 0 0 1px #4EB751 inset;
+  box-shadow: 0 0 0 1px #4EB751 inset;
+  text-shadow: 0 -1px #2f6e31, 1.41422px -1.41422px #2f6e31, 1px 0 #2f6e31, 1.41422px 1.41422px #2f6e31, 0 1px #2f6e31, -1.41422px 1.41422px #2f6e31, -1px 0 #2f6e31, -1.41422px -1.41422px #2f6e31;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031114}}
+#sm_editions .sm-editions-group {
+  padding: 0 8px;
+  border-bottom: 1px solid #9a9a9a;
+  -moz-box-shadow: 0 -4px 3px -2px rgba(0, 0, 0, 0.15) inset;
+  -webkit-box-shadow: 0 -4px 3px -2px rgba(0, 0, 0, 0.15) inset;
+  box-shadow: 0 -4px 3px -2px rgba(0, 0, 0, 0.15) inset;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031121}}
+#sm_editions .sm-editions-group > .sm-label, #sm_editions .sm-editions-group > .sm-editions-content {
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031128}}
+#sm_editions .sm-label .unpublished {
+  color: #00A8FF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031131}}
+#sm_editions .sm-label .archived {
+  color: #3c5a3c;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031134}}
+#sm_editions .sm-label .published {
+  color: #00C000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031137}}
+#sm_editions .sm-label .current_locale {
+  color: #FFEE00;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031142}}
+#sm_editions #sm-editions-editions {
+  background: #e3e3e3;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031145}}
+#sm_editions #sm-editions-editions .sm-tabs .sm-tab a:hover {
+  background: rgba(232, 232, 232, 0.5);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031148}}
+#sm_editions #sm-editions-editions .sm-tabs .sm-tab.selected a {
+  background: #e8e8e8;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031153}}
+#sm_editions .sm-editions-group {
+  background: #e8e8e8;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031156}}
+#sm_editions .sm-editions-group .sm-tabs .sm-tab a:hover {
+  background: rgba(240, 240, 240, 0.5);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031159}}
+#sm_editions .sm-editions-group .sm-tabs .sm-tab.selected a {
+  background: #f0f0f0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031163}}
+#sm_editions .sm-editions-group #persona_none a {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4wIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0.5)), color-stop(100%, rgba(255, 255, 255, 0)));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  color: #666666;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003173}}
+#sm_editions .sm-editions-group #persona_none a:active {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC41Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0.5)));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003182}}
+#sm_editions .sm-editions-group #persona_none a:hover {
+  color: black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003185}}
+#sm_editions .sm-editions-group #persona_none a:active {
+  color: black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003201}}
+#sm_editions .sm-editions-group #persona_none a:active {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003207}}
+#sm_editions .sm-editions-group #persona_none a:active {
+  padding-left: 0;
+  padding-right: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003211}}
+#sm_editions .sm-editions-group #persona_none a {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003214}}
+#sm_editions .sm-editions-group #persona_none a:active {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_buttons\.scss}line{font-family:\00003220}}
+#sm_editions .sm-editions-group #persona_none a:active {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031167}}
+#sm_editions #sm-editions-funnels {
+  margin-top: 10px;
+  background: #f0f0f0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031171}}
+#sm_editions #sm-editions-funnels .sm-tabs .sm-tab a:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031174}}
+#sm_editions #sm-editions-funnels .sm-tabs .sm-tab.selected a {
+  background: #FFFFFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031179}}
+#sm_editions #sm-editions-funnels .sm-editions-content > :first-child {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031183}}
+#sm_editions #sm-editions-funnels #funnel_none {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  font-style: oblique;
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031189}}
+#sm_editions #sm-editions-funnels .sm-funnel-step {
+  white-space: nowrap;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031191}}
+#sm_editions #sm-editions-funnels .sm-funnel-step .sm-funnel-step-number {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  font-weight: bold;
+  padding-right: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031199}}
+#sm_editions .sm_edition_item {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031202}}
+#sm_editions .sm_edition_item.unpublished a {
+  color: #00A8FF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031203}}
+#sm_editions .sm_edition_item.published a {
+  color: #00C000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031204}}
+#sm_editions .sm_edition_item.archived a {
+  color: #3c5a3c;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031207}}
+#sm_editions .sm-tabs .sm_edition_item.selected a {
+  color: #000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031212}}
+#sm_editions button, #sm_editions input[type=button] {
+  padding: 5px 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031214}}
+#sm_editions button:active, #sm_editions input[type=button]:active {
+  padding: 6px 6px;
+}
+
+/*  ----------------------
+
+    Skipped items dropdown
+    
+    ----------------------
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031231}}
+#sm_ddlSkippedCmsitems .sm-label {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  padding: 0 .8em;
+  margin: 0 1em;
+  line-height: 27px;
+  height: 29px;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
+  background: #FFF;
+  color: #000;
+  border-radius: 3px;
+  border: 2px solid #FFF;
+  transition: .3s color,.3s background;
+  cursor: pointer;
+  box-shadow: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031249}}
+#sm_ddlSkippedCmsitems .sm-label.open {
+  background: #000;
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031255}}
+#sm_ddlSkippedCmsitems .sm-label:after {
+  color: #000;
+  top: 1px;
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031256}}
+#sm_ddlSkippedCmsitems .sm-label.open:after {
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031260}}
+#sm_ddlSkippedCmsitems > .sm-content {
+  top: 200%;
+  width: 100%;
+  padding: 0;
+  overflow: scroll;
+  height: 500px;
+  position: absolute;
+  left: 0;
+  visibility: hidden;
+  transition: .3s top ease,.3s opacity ease,.3s visibility ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031269}}
+#sm_ddlSkippedCmsitems > .sm-content.active {
+  top: 40px;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031277}}
+#sm_skipped_cmsitems_linkable {
+  text-align: center;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #d9d9d9;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031283}}
+#sm_skipped_cmsitems_linkable:empty {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031288}}
+#sm_skipped_cmsitems_container,
+#sm_ddlSkippedCmsEditions {
+  padding: 0 0 2px;
+  text-align: left;
+  border-bottom: 1px solid #fff;
+  position: relative;
+  background-color: #ddd;
+  width: 950px;
+  left: -950px;
+  opacity: 0;
+  transition: .5s left ease,.5s visibility ease,.5s opacity ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031300}}
+#sm_skipped_cmsitems_container.active,
+#sm_ddlSkippedCmsEditions.active {
+  left: 0;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031304}}
+#sm_editing-save-as-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  color: #F4F4F4;
+  width: 400px;
+  right: -464px;
+  left: auto;
+  opacity: 0;
+  transition: .5s right ease,.5s visibility ease,.5s opacity ease;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031316}}
+#sm_editing-save-as-content.active {
+  right: 0;
+  left: auto;
+  opacity: 1;
+  visibility: visible;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031318}}
+#sm_editing-save-as-content .sm-content-close-btn {
+  left: 0;
+  right: auto;
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031321}}
+#sm_editing-save-as-content .sm-content-close-btn:hover, #sm_editing-save-as-content .sm-content-close-btn:focus, #sm_editing-save-as-content .sm-content-close-btn:active {
+  color: #C00000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031325}}
+#sm_skipped_cmsitems > .sm-label {
+  height: 40px;
+  padding: 12px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031330}}
+ul#sm_skipped_cmsitems,
+ul#sm_skipped_cmsitems_global {
+  margin: 0;
+  padding: 0;
+  -moz-column-width: 280px;
+  -webkit-column-width: 280px;
+  column-width: 280px;
+  padding: 18px 8px 12px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003221}}
+ul#sm_skipped_cmsitems li,
+ul#sm_skipped_cmsitems_global li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031335}}
+ul#sm_skipped_cmsitems li,
+ul#sm_skipped_cmsitems_global li {
+  padding: 0 0 9px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031338}}
+ul#sm_skipped_cmsitems li a,
+ul#sm_skipped_cmsitems_global li a {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  color: black;
+  text-decoration: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031343}}
+ul#sm_skipped_cmsitems li a:hover,
+ul#sm_skipped_cmsitems_global li a:hover {
+  text-decoration: underline;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031347}}
+ul#sm_skipped_cmsitems_global {
+  /*background: $color-shaded-bg;*/
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIyJSIgc3RvcC1jb2xvcj0iI2M4YzhjOCIvPjxzdG9wIG9mZnNldD0iMTQlIiBzdG9wLWNvbG9yPSIjZWFlYWVhIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZWFlYWVhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(2%, #c8c8c8), color-stop(14%, #eaeaea), color-stop(100%, #eaeaea));
+  background-image: -moz-linear-gradient(bottom, #c8c8c8 2%, #eaeaea 14%, #eaeaea);
+  background-image: -webkit-linear-gradient(bottom, #c8c8c8 2%, #eaeaea 14%, #eaeaea);
+  background-image: linear-gradient(to top, #c8c8c8 2%, #eaeaea 14%, #eaeaea);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031352}}
+.globalTitle {
+  border-top: 1px solid #7e7e7e;
+  border-bottom: 1px solid #a0a0a0;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2MzYzNjMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzk1OTU5NSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #c3c3c3), color-stop(100%, #959595));
+  background-image: -moz-linear-gradient(bottom, #c3c3c3, #959595);
+  background-image: -webkit-linear-gradient(bottom, #c3c3c3, #959595);
+  background-image: linear-gradient(to top, #c3c3c3, #959595);
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_theme\.scss}line{font-family:\00003165}}
+.globalTitle strong {
+  display: block;
+  padding: 7px 8px;
+  border-top: 1px solid #b6b6b6;
+  border-bottom: 1px solid #d6d6d6;
+  font-size: 14px;
+  color: #fff;
+  text-transform: uppercase;
+  text-shadow: 0 1px #8b8b8b;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031356}}
+.globalTitle.open {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FiYWJhYiIvPjxzdG9wIG9mZnNldD0iMjAlIiBzdG9wLWNvbG9yPSIjOWQ5ZDlkIi8+PHN0b3Agb2Zmc2V0PSI5NSUiIHN0b3AtY29sb3I9IiNkYWRhZGEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #ababab), color-stop(20%, #9d9d9d), color-stop(95%, #dadada), color-stop(100%, #dadada));
+  background-image: -moz-linear-gradient(bottom, #ababab, #9d9d9d 20%, #dadada 95%, #dadada);
+  background-image: -webkit-linear-gradient(bottom, #ababab, #9d9d9d 20%, #dadada 95%, #dadada);
+  background-image: linear-gradient(to top, #ababab, #9d9d9d 20%, #dadada 95%, #dadada);
+  border-top: 1px solid #7f7f7f;
+  border-bottom: 1px solid #6f6f6f;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031360}}
+.globalTitle.open strong {
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+/*  ----------------------
+
+    Other stuff in menubar
+    
+    ----------------------
+*/
+/* "Edit mode" button */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031375}}
+#sm-edit-mode-btn {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  margin: 0 1em;
+  line-height: 21px;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
+  background: #00C000;
+  color: #FFF;
+  border-radius: 3px;
+  border: 2px solid #00C000;
+  transition: .3s color,.3s background;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031388}}
+#sm-edit-mode-btn, #sm-edit-mode-btn * {
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031390}}
+#sm-edit-mode-btn.checked {
+  background: #FFF;
+  color: #00C000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031395}}
+#sm-edit-mode-btn input[type="checkbox"] {
+  position: absolute;
+  left: -9999em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031400}}
+#sm-edit-mode-btn label {
+  padding: 0 .8em;
+  line-height: 22px;
+  height: 22px;
+  font-weight: bold;
+}
+
+/* The translation menu contains buttons which don't like to be nowrapped */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031408}}
+html #editingToolbar .edit-tab ul li.sm-translation {
+  white-space: normal;
+}
+
+/*  ================
+
+    Lightboxed stuff
+    
+    ================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031420}}
+#TB_window #sm_translations_list {
+  margin: 0;
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003221}}
+#TB_window #sm_translations_list li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031422}}
+#TB_window #sm_translations_list .sm-translation {
+  *zoom: 1;
+  *zoom: 1;
+  /* IE < 8 */
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003248}}
+#TB_window #sm_translations_list .sm-translation:before, #TB_window #sm_translations_list .sm-translation:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/_utils\.scss}line{font-family:\00003255}}
+#TB_window #sm_translations_list .sm-translation:after {
+  clear: both;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031424}}
+#TB_window #sm_translations_list .sm-translation .sm-actions {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  float: right;
+  margin-left: 5px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031429}}
+#TB_window #sm_translations_list .sm-translation .sm-actions .sm-action {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border: 1px solid transparent;
+  padding: 2px 3px;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031434}}
+#TB_window #sm_translations_list .sm-translation .sm-actions .sm-action:hover {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.33), 0 1px 1px rgba(255, 255, 255, 0.25);
+  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.33), 0 1px 1px rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.33), 0 1px 1px rgba(255, 255, 255, 0.25);
+  background: #FF00FF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031448}}
+#TB_window #sm_translations_list .sm-delete:before {
+  content: "\2718";
+  color: #C00000;
+  padding-right: 5px;
+}
+
+/*  ============
+
+    Widget Grids
+    
+    ============
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031466}}
+.widget-grid .sm-cms-element-empty-deprecated {
+  background-image: linear-gradient(to bottom, #ffffff, #eeeeee);
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #CCC;
+}
+
+/*  ============
+
+    Editing mode
+    
+    ============
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031484}}
+body.editmode #sm_ddlSkippedCmsitems {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031486}}
+body.editmode #TB_window {
+  top: 41px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031491}}
+#editingToolbar {
+  background-color: #2F2F2F;
+  color: #aeaeae;
+  z-index: 1;
+  padding-bottom: 1px;
+  -moz-box-shadow: 0 -1px 0 #afafaf inset;
+  -webkit-box-shadow: 0 -1px 0 #afafaf inset;
+  box-shadow: 0 -1px 0 #afafaf inset;
+  position: fixed;
+  width: 100%;
+  border-bottom: 3px solid #696969;
+  top: 1px;
+  height: 1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031504}}
+#editingToolbar .edit-tab {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: middle;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031509}}
+#editingToolbar .edit-label {
+  line-height: 40px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031513}}
+#editingToolbar.scrolled {
+  position: fixed;
+  top: 41px;
+  left: 0px;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031523}}
+#edit-more > .edit-content,
+#edit-save > .edit-content {
+  width: 190px !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031529}}
+#edit-more .sm-translation {
+  clear: right;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031532}}
+#edit-more .sm-actions {
+  float: right;
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+  border: 1px solid #9e0b0f;
+  text-transform: uppercase;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzc5MDAwMCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzllMGIwZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #790000), color-stop(100%, #9e0b0f));
+  background-image: -moz-linear-gradient(bottom, #790000, #9e0b0f);
+  background-image: -webkit-linear-gradient(bottom, #790000, #9e0b0f);
+  background-image: linear-gradient(to top, #790000, #9e0b0f);
+  margin: -6px 0 0;
+  cursor: pointer !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031544}}
+#edit-more > .edit-content li {
+  padding: 7px 9px !important;
+  cursor: auto !important;
+  text-transform: uppercase;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031548}}
+#edit-more > .edit-content li:hover {
+  background: none !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031555}}
+#tb_close {
+  color: #fff;
+  border: 1px solid #9e0b0f;
+  text-transform: uppercase;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzc5MDAwMCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzllMGIwZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #790000), color-stop(100%, #9e0b0f));
+  background-image: -moz-linear-gradient(bottom, #790000, #9e0b0f);
+  background-image: -webkit-linear-gradient(bottom, #790000, #9e0b0f);
+  background-image: linear-gradient(to top, #790000, #9e0b0f);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031562}}
+#edit-id {
+  font-style: italic;
+  margin-left: 10px;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031569}}
+html #content-container #core-content #splash-controls-wrapper {
+  z-index: 3;
+  /* to put it in front of youtube-player hero images */
+}
+
+/*  ==================
+
+    Processing Message
+    
+    ==================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031581}}
+#processingMessage {
+  position: absolute;
+  /* top and left are set dynamically */
+  width: 280px;
+  height: 120px;
+  margin: 0px auto;
+  border-radius: 5px;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2UzZTNlMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #e3e3e3), color-stop(100%, #eeeeee));
+  background-image: -moz-linear-gradient(bottom, #e3e3e3, #eeeeee);
+  background-image: -webkit-linear-gradient(bottom, #e3e3e3, #eeeeee);
+  background-image: linear-gradient(to top, #e3e3e3, #eeeeee);
+  border: 3px solid #555;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031591}}
+#processingMessage p {
+  font-weight: bold;
+  text-align: center;
+  padding-top: 20px;
+}
+
+/*  =================
+
+    CKEditor override
+    
+    =================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031606}}
+html span.cke_skin_kama {
+  padding: 0;
+  border: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031611}}
+html div.form_element {
+  width: 715px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031616}}
+html div.donate-amount-layout div.form_element {
+  width: auto;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031620}}
+html #cke_path_content {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031626}}
+html .cke_skin_kama .cke_toolbox {
+  margin-left: -357px;
+  position: fixed;
+  top: 84px;
+  left: 50%;
+  padding: 0px 5px;
+  border: 2px solid #BABABA;
+  border-top-width: 0px;
+  border-bottom-radius: 5px;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2UzZTNlMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #e3e3e3), color-stop(100%, #eeeeee));
+  background-image: -moz-linear-gradient(bottom, #e3e3e3, #eeeeee);
+  background-image: -webkit-linear-gradient(bottom, #e3e3e3, #eeeeee);
+  background-image: linear-gradient(to top, #e3e3e3, #eeeeee);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031637}}
+html .cke_skin_kama .cke_contents {
+  margin: 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031641}}
+html .cke_skin_kama .cke_wrapper {
+  background: none;
+  border: none;
+  padding: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031647}}
+html .cke_skin_kama .cke_contents iframe {
+  border: 1px solid #CCCCCC;
+  overflow: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031652}}
+html .cke_skin_kama .cke_contents iframe body {
+  text-align: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031656}}
+html .cke_skin_kama #cke_bottom_content {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031659}}
+html .cke_skin_kama a.cke_toolbox_collapser,
+html .cke_skin_kama a.cke_toolbox_collapser:hover {
+  position: fixed;
+  left: 50%;
+  margin-left: 300px;
+  top: 75px;
+  background-color: #fff;
+}
+
+/* Funnel Steps when logged in as admin */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031670}}
+html .steps ul li div.funnel-skip-link {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031673}}
+html .steps ul li img.funnel-skip {
+  float: right;
+  position: relative;
+  top: -23px;
+  left: 4px;
+}
+
+/*  =================
+
+    Substitutions field in edit dialogs
+    
+    =================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031687}}
+html .zend_form #substitutions, html .zend_form #global-substitutions {
+  padding-top: 5px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031697}}
+html .cke_editor #substitutions p,
+html .zend_form #substitutions p,
+html #ckedit #substitutions p,
+html .cke_editor #global-substitutions p,
+html #ckedit #global-substitutions p {
+  font-size: 12px;
+  color: #333333;
+  padding: 5px 0;
+  float: left;
+  margin: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031705}}
+html .cke_editor #substitutions ul,
+html .zend_form #substitutions ul,
+html #ckedit #substitutions ul,
+html .cke_editor #global-substitutions ul,
+html #ckedit #global-substitutions ul {
+  margin: 0;
+  padding: 0 0 0 5px;
+  clear: both;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031710}}
+html .cke_editor #substitutions ul li,
+html .zend_form #substitutions ul li,
+html #ckedit #substitutions ul li,
+html .cke_editor #global-substitutions ul li,
+html #ckedit #global-substitutions ul li {
+  font-size: 11px;
+  display: inline;
+  list-style-type: none;
+  padding: 2px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ViZWJlYiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #ebebeb), color-stop(100%, #ffffff));
+  background-image: -moz-linear-gradient(bottom, #ebebeb, #ffffff);
+  background-image: -webkit-linear-gradient(bottom, #ebebeb, #ffffff);
+  background-image: linear-gradient(to top, #ebebeb, #ffffff);
+  cursor: pointer;
+  margin-right: 2px;
+}
+
+/** Global substitutions, to sit under the standard subs **/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031725}}
+html .cke_editor #global-substitutions,
+html #ckedit #global-substitutions {
+  margin-top: 25px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031728}}
+html .cke_editor #global-substitutions div,
+html #ckedit #global-substitutions div {
+  clear: both;
+  font-size: 12px;
+  background-color: #fafafa;
+  padding-bottom: 3px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031735}}
+html .cke_editor #global-substitutions ul li,
+html #ckedit #global-substitutions ul li {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjEuMCIgeDI9IjAuNSIgeTI9IjAuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NjY2NjYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #cccccc), color-stop(100%, #eeeeee));
+  background-image: -moz-linear-gradient(bottom, #cccccc, #eeeeee);
+  background-image: -webkit-linear-gradient(bottom, #cccccc, #eeeeee);
+  background-image: linear-gradient(to top, #cccccc, #eeeeee);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031741}}
+html .zend_form {
+  outline: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031745}}
+html .zend_form div.mospace_error, .zend_form div.form_element_errors {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  *min-width: auto;
+  *min-height: auto;
+  display: none;
+}
+
+/*  =================
+
+    Overriding the default form appearance for dialogs in Samurai
+    
+    =================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031758}}
+html #input-editor .zend_form #form_element_content input[type="text"] {
+  font-size: 11px;
+  width: 99%;
+}
+
+/* Link Type forms */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031768}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  *min-width: auto;
+  *min-height: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031789}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary div.form_element_label,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link div.form_element_label {
+  min-width: 85px;
+  background-color: #fff;
+  color: #333;
+  float: left;
+  margin-top: 15px;
+  width: 20%;
+  text-align: left;
+  padding: 0px;
+  min-width: label;
+  min-width-margin-left: 5px;
+  min-width-padding: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031806}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary div.form_element_input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link div.form_element_input {
+  float: left;
+  clear: right;
+  margin-top: 5px;
+  margin-left: 5px;
+  width: 75%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031814}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary div.form_element_input input,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link div.form_element_input input {
+  width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031819}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id input[type=text], html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link input[type=text],
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link select {
+  border: 1px solid #ccc;
+  padding: 1px;
+  font-size: 12px;
+  margin-top: 7px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031825}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary input:disabled,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link input:disabled {
+  background-color: #eee;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031828}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_element_id select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_height select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_width select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_youtube_id select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_text select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_link_target select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link_target select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_caption select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_title select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_reference select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_target select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_delay select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_position select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_type select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_identifier select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_summary select,
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form fieldset#fieldset-content #form_element_content_image_link select {
+  float: left;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031835}}
+html div#ckedit span#cke_content table.cke_editor td#cke_contents_content {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  *min-width: auto;
+  *min-height: auto;
+  width: 100%;
+  height: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031840}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form {
+  padding: 0px;
+  margin: 0px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031844}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form #form_element_content div.form_element_input {
+  width: 99%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031847}}
+html .ui-widget-content form#samuraiCMSeditContentForm .zend_form #form_element_content div.form_element_input textarea {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  *min-width: auto;
+  *min-height: auto;
+  height: 100%;
+  width: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031852}}
+html form#samuraiCMSeditContentForm {
+  width: auto;
+  height: 100%;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031856}}
+html form#samuraiCMSeditContentForm table.cke_editor {
+  display: table;
+}
+
+/* The YUI Reset CSS will leave all text aligning centrally in the Input editor for WYSIWYGs */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031860}}
+body {
+  text-align: left;
+}
+
+/*  ====
+
+    Misc
+    
+    ====
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031872}}
+.ui-dialog {
+  overflow: visible !important;
+}
+
+/*  =================
+
+    Z-indexes
+    
+    =================
+*/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031884}}
+#sm_menubars_container {
+  z-index: 100000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031885}}
+#sm, #editingToolbar {
+  z-index: 9999;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031886}}
+#image_preview_container {
+  z-index: 9999;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031887}}
+#TB_window {
+  z-index: 9000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031888}}
+#TB_window ~ .ui-dialog, #TB_load {
+  z-index: 8999 !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031889}}
+#TB_overlay {
+  z-index: 8000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031890}}
+#editingToolbar {
+  z-index: 6000;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031891}}
+#sm_overlay {
+  z-index: 1000;
+}
+
+/** For Samurai Toolbar Member Search stuff **/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031897}}
+#sm_editions .nav-tabs li:not(.active, :hover) a {
+  background-color: #eee;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031903}}
+#sm_editions .form-group {
+  margin-bottom: 15px;
+  display: block;
+}
+
+/** Custom SIzing of form elements for old school zend forms (ie. Samurai Editing form) **/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031911}}
+dd fieldset.samurai-form-thirds div.form_element {
+  width: 30%;
+  float: left;
+  padding-right: 10px;
+}
+
+/** Samurai form collapsible fieldset **/
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031920}}
+.samurai-collapsible-set dl {
+  padding-left: 30px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031924}}
+.samurai-collapsible-set.set-collapsed > dl {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031929}}
+.samurai-collapsible-toggle {
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+  float: left;
+  margin: 2px;
+  background-image: url("/samurai/images/triangledown.png");
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031939}}
+.samurai-collapsible-set legend {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/srv\/movember\.com\/releases\/20120817072736\/public\/samurai\/cms\.scss}line{font-family:\000031944}}
+.samurai-collapsible-set.set-collapsed div.samurai-collapsible-toggle {
+  background-image: url("/samurai/images/triangleright.png");
+}
